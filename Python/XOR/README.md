@@ -14,10 +14,10 @@
 ## Usage
 
 **Encrypt file msgbox.bin with our own key and encrypt a string or several strings**
-`python .\cryptorXORv3.py -k 1234567890abcdef msgbox.bin, VirtualAlloc, CreateRemoteThread`
+`python .\cryptorXOR.py -k 1234567890abcdef msgbox.bin, VirtualAlloc, CreateRemoteThread`
 
 **Encrypt a msgbox.bin file and a string without providing your own key. This will generate a random XOR key that will be printed to the console**
-`python .\cryptorXORv3.py  msgbox.bin, VirtualAlloc`
+`python .\cryptorXOR.py  msgbox.bin, VirtualAlloc`
 
 ## Dependencies
 `pip install colorama`

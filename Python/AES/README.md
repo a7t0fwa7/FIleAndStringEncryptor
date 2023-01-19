@@ -25,7 +25,7 @@ Print out a randomised 256 bit encrypted shell code for a msgbox.bin file and di
 
 `python .\cryptorAEScomplete.py -e msgbox.bin, VirtualAlloc, GetProcAddress, GetRemoteThread -r 256 -s`
 
-Dependencies
-Pycryptodomex `pip install pycryptodomex`
-Termcolor     `pip install termcolor`
-Colorama      `pip install colorama`
+## Dependencies
+- Pycryptodomex `pip install pycryptodomex`
+- Termcolor     `pip install termcolor`
+- Colorama      `pip install colorama`
