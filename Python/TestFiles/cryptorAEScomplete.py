@@ -1,11 +1,9 @@
-import re
 import os
 import sys
 import argparse
 from colorama import Fore
 from Cryptodome.Cipher import AES
 from Cryptodome.Random import get_random_bytes
-from termcolor import colored, cprint
 
 # Function to encrypt a file or string using AES
 def encrypt_data(data, key, key_size):
@@ -71,32 +69,6 @@ def decrypt_file(file_path, key):
     plaintext = decrypt_data(ciphertext, key)
     return plaintext
 
-# Function is still experimental
-#def shellcode_to_bytes():
-#    """
-#    Converts shellcode input from the console into a raw bytes output and writes it to a ".bin" file
-#    """
-#    # Get the shellcode input from the console
-#    shellcode = input("Enter the shellcode in \xXX format: ")
-#    # Use regular expressions to match the shellcode format (\xXX)
-#    match = re.findall(r'\\x[0-9a-fA-F]{2}', shellcode)
-#    # Concatenate the matched strings into a single string
-#    shellcode = ''.join(match)
-#    # Use bytes.fromhex() to convert the shellcode string into a bytes object
-#    shellcode_bytes = bytes.fromhex(shellcode.replace('\\x', ''))
-#    # Write the bytes object to a ".bin" file
-#    with open("shellcode.bin", "wb") as f:
-#        f.write(shellcode_bytes)
-#    print(Fore.GREEN + f'Successfully converted shellcode to bytes and written to "shellcode.bin".')
-#    print(Fore.YELLOW + f'Raw bytes output size: {len(shellcode_bytes)} bytes.')
-
-def shellcode_to_bytes(shellcode):
-    shellcode_bytes = bytes(shellcode, 'utf-8')
-    with open("shellcode.bin", "wb") as file:
-        file.write(shellcode_bytes)
-    print(Fore.GREEN + f'Successfully wrote {len(shellcode_bytes)} bytes to shellcode.bin.')
-
-
 # Main function to handle command-line arguments and perform encryption/decryption
 def main():
     # Set up the command-line argument parser
@@ -106,8 +78,6 @@ def main():
     parser.add_argument('-k', '--key', help='AES key to use for encryption/decryption')
     parser.add_argument('-r', '--random-key', help='Generate a random AES key of the specified size (128 or 256)', type=int)
     parser.add_argument('-s', '--shellcode', action='store_true', help='Print the encrypted data in shellcode format')
-    #parser.add_argument('-sc', '--shellcode-user-input', action='store_true', help='Convert shellcode from user input to bytes and write to a file')
-    parser.add_argument('-sf', '--shellcode-file', help='Convert shellcode from file to bytes and write to a file')
 
     # Parse the command-line arguments
     args = parser.parse_args()
@@ -168,17 +138,6 @@ def main():
                 print(Fore.GREEN + f'Successfully decrypted string: {data}.')
                 print(Fore.YELLOW + 'Decrypted content:')
                 print(Fore.LIGHTMAGENTA_EX + plaintext.decode())
-    
-    # Function does not work yet
-    #if args.shellcode:
-    #    shellcode_to_bytes(args.shellcode.replace("\\x", "").replace(" ", ""))
-
-
-    if args.shellcode_file:
-        with open(args.shellcode_file, "r") as file:
-            shellcode = file.read()
-        shellcode_to_bytes(shellcode)
-
     else:
         # If no action specified, print an error message
         print(Fore.RED + 'Error: No action specified. Use -e to encrypt or -d to decrypt.')
