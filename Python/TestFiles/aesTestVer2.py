@@ -103,16 +103,16 @@ def decrypt_file(file_path, password, key_size=256):
     print(f'{Fore.GREEN}[+] {file_path} has been decrypted and saved as {decrypted_file_path}{Style.RESET_ALL}')
     return decrypted_file_path
 
-def decrypt_string(encryption_key, encrypted_string):
+def decrypt_string(encryption_key_str, encrypted_string):
     # Parse the encryption key string to extract the hexadecimal values
-    key = bytes.fromhex(encryption_key.replace(',', '').replace('0x', ''))
+    encryption_key = bytes.fromhex(encryption_key_str.replace(',', '').replace('0x', ''))
 
     # Parse the encrypted string to extract the hexadecimal values
     ciphertext = bytes.fromhex(encrypted_string.replace(',', '').replace('0x', ''))
 
     # Perform decryption
     backend = default_backend()
-    cipher = Cipher(algorithms.AES(key), modes.CBC(os.urandom(16)), backend=backend)
+    cipher = Cipher(algorithms.AES(encryption_key), modes.CBC(os.urandom(16)), backend=backend)
     decryptor = cipher.decryptor()
     string = decryptor.update(ciphertext) + decryptor.finalize()
 
@@ -120,7 +120,9 @@ def decrypt_string(encryption_key, encrypted_string):
     string = string.rstrip(b'\0')
 
     # Return the decrypted string
-    return string.decode()
+    return string.decode('iso-8859-1')
+    #return string.decode('latin-1')
+    #return string.decode()
 
 
 '''
@@ -169,7 +171,60 @@ def hex_to_bin(hex_str):
     print(f'{Fore.GREEN}[+] Hex string has been converted to binary and saved as {bin_file_path}{Style.RESET_ALL}')
     return bin_file_path
 
+# Added Hex String Parser
+def parse_hex_string(hex_string):
+    hex_string = hex_string.strip().split(',')
+    return bytes([int(x.strip(), 16) for x in hex_string])
 
+
+def main():
+    parser = argparse.ArgumentParser(description='Encrypt and decrypt files and strings using AES encryption')
+    parser.add_argument('-e', '--encrypt', nargs='+', help='File(s) or string(s) to encrypt')
+    parser.add_argument('-d', '--decrypt', nargs='+', help='File(s) or string(s) to decrypt')
+    parser.add_argument('-p', '--password', help='Password to use for encryption/decryption')
+    parser.add_argument('-r', '--random', action='store_true', help='Use random password for encryption')
+    parser.add_argument('-k', '--keysize', type=int, choices=[128, 256], default=256, help='Key size to use for encryption (default: 256)')
+    parser.add_argument('-x', '--hex', help='Convert hex string to binary file')
+    args = parser.parse_args()
+
+    if args.encrypt:
+        if args.random:
+            password = get_random_bytes(args.keysize//8)
+        else:
+            password = parse_hex_string(args.password) if args.password and '0x' in args.password else args.password.encode()
+        for item in args.encrypt:
+            if os.path.isfile(item):
+                encrypt_file(item, password, args.keysize)
+            else:
+                encrypt_string(item, password, args.keysize)
+    if args.decrypt:
+        if args.random:
+            password = get_random_bytes(args.keysize//8)
+        else:
+            password = args.password.encode()
+            #password = parse_hex_string(args.password) if args.password and '0x' in args.password else args.password.encode()
+        for item in args.decrypt:
+            if os.path.isfile(item):
+                decrypt_file(item, password, args.keysize)
+            else:
+                encryption_key_str = args.password
+                encrypted_string = item
+                decrypted_string = decrypt_string(encryption_key_str, encrypted_string)
+                print(decrypted_string)
+                #decrypted_string = decrypt_string(item, password)
+                #print(decrypted_string)
+                #encrypted_string = parse_hex_string(item) if item and '0x' in item else item.encode()
+                #decrypt_string(encrypted_string, password, args.keysize)
+                #decrypt_string(encrypted_string, password)
+    if args.hex:
+        hex_to_bin(args.hex)
+
+if __name__ == '__main__':
+    main()
+
+
+'''
+OLD MAIN FUNCTION
 def main():
     parser = argparse.ArgumentParser(description='Encrypt and decrypt files and strings using AES encryption')
     parser.add_argument('-e', '--encrypt', nargs='+', help='File(s) or string(s) to encrypt')
@@ -205,3 +260,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+'''
