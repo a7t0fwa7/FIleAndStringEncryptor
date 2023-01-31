@@ -2,18 +2,19 @@
 I used the pycryptodomex library and termcolor to create a basic AES file and string encryptor that pushed the coloured output to the console
 
 I then used the same crypto library, and this time the colorama library to create a more complete script that does the following:
-
+Using python:
 - the script will allow the user to enter one or several files or one or several strings as input
 - the script will allow the user to encrypt the files and the strings using AES encryption.
-- the script will allow the user to choose a custom 128 or 256 bit encryption key
-- the script will allow the user to choose a randomised 128 or 256 encryption key
-- the script will print out the encrypted AES file as shellcode
+- the script will have an option that allows the user to choose a custom 128 or 256 bit encryption key
+- the script will have an option that allows the user to choose a randomised 128 or 256 encryption key 
+- the script will print out the encrypted AES file as shellcode like this: Encrypted File Output = { 0x65, 0xa6, etc... };
 - the script will print out the number of bytes for the encrypted file
-- the script will Print the AES key in shellcode format in order to decrypt the file and strings
+- the script will add a null byte at the end of the cleartext string prior to encryption,
+- the script will Print the AES key in shellcode format in order to decrypt the file for example like this: Encrypted File Key = { 0x65, 0xa6, etc... }; 
+- the script will Print the AES key in shellcode format in order to decrypt the strings for example like this: Encrypted String Key = { 0x65, 0xa6, etc... };
 - the script will then print out the unencrypted names of the strings alongside the shellcode encrypted version of the strings
 - the script will print each string separately by iterating through the list
 - the script will use colored output when printing to the console, 
-- the script will add a null byte at the end of the shellcode output,
 - the script will add a function to decrypt the files and strings, which takes the encrypted file/string, and the AES key as input
 - the script will handle exceptions in case of any errors such as file not found
 - the script will add detailed explanations for each command-line argument
