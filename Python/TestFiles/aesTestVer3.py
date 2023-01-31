@@ -86,8 +86,8 @@ def encrypt_string(string, password, key_size=256, key=None, encoding='utf-8'):
     print(colored(f'[+] Encrypted String = {{ {ciphertext_hex} }};', 'red'))
 
     return ciphertext
-
-# New Function to try out
+'''
+# 1st New Function to try out
 def encrypt_strings(strings, password, key_size=256, key=None, encoding='utf-8'):
     # Generate key from password
     if key is None:
@@ -111,6 +111,33 @@ def encrypt_strings(strings, password, key_size=256, key=None, encoding='utf-8')
         encrypted_strings.append(ciphertext)
 
     return encrypted_strings
+'''
+'''
+# 2nd New function to try out
+def encrypt_strings(strings, password, key_size=256, key=None, encoding='utf-8'):
+    encrypted_strings = []
+    for string in strings:
+        # Generate key from password
+        if key is None:
+            key = password
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(key), modes.CBC(os.urandom(16)), backend=backend)
+        encryptor = cipher.encryptor()
+
+        # Add a null byte to the clear text string
+        string = string.encode(encoding)
+        string = string + b'\x00'
+
+        # Pad string to be a multiple of the block size
+        padding = 16 - (len(string) % 16)
+        string += b'\x00' * padding
+
+        # Encrypt string
+        ciphertext = encryptor.update(string) + encryptor.finalize()
+        encrypted_strings.append(ciphertext)
+    return encrypted_strings
+
+'''
 
 '''
 OLD FUNCTION
@@ -244,6 +271,7 @@ def main():
                 encrypt_file(item, password, args.keysize)
             else:
                 encrypt_string(item, password, args.keysize)
+    
     # Encrypt the strings if the --strings option is given
     if args.strings:
         if args.password:
@@ -254,6 +282,20 @@ def main():
         encrypted_strings = encrypt_strings(strings, password, args.keysize)
         for name, encrypted_string in encrypted_strings:
             print(f'Encrypted string {name}: {encrypted_string.hex()}')
+
+    '''
+    # new Encrypt Strings function for Main to try out
+    if args.strings:
+    if args.random:
+        password = get_random_bytes(args.keysize//8)
+    else:
+        password = parse_hex_string(args.password) if args.password and '0x' in args.password else args.password.encode("utf-8")
+    strings = [(name, string) for name, string in zip(args.names, args.strings)]
+    encrypted_strings = encrypt_strings(args.strings, password, args.keysize)
+    for name, encrypted_string in enumerate(encrypted_strings):
+        print(f'Encrypted string {name}: {encrypted_string.hex()}')
+
+    '''
 
     '''
     if args.strings:
