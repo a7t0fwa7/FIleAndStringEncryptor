@@ -52,7 +52,7 @@ def encrypt_file(file_path, key, key_size):
     # Encrypt the file's contents and return the ciphertext
     ciphertext = encrypt_data(data, key, key_size)
     return ciphertext
-
+'''
 # Function to read in and decrypt a file
 def decrypt_file(file_path, key):
     """
@@ -68,13 +68,13 @@ def decrypt_file(file_path, key):
     # Decrypt the file's contents and return the plaintext
     plaintext = decrypt_data(ciphertext, key)
     return plaintext
-
+'''
 # Main function to handle command-line arguments and perform encryption/decryption
 def main():
     # Set up the command-line argument parser
     parser = argparse.ArgumentParser(description='Encrypt/decrypt files and strings using AES.')
     parser.add_argument('-e', '--encrypt', nargs='+', help='File(s) or string(s) to encrypt')
-    parser.add_argument('-d', '--decrypt', nargs='+', help='File(s) or string(s) to decrypt')
+    #parser.add_argument('-d', '--decrypt', nargs='+', help='File(s) or string(s) to decrypt')
     parser.add_argument('-k', '--key', help='AES key to use for encryption/decryption')
     parser.add_argument('-r', '--random-key', help='Generate a random AES key of the specified size (128 or 256)', type=int)
     parser.add_argument('-s', '--shellcode', action='store_true', help='Print the encrypted data in shellcode format')

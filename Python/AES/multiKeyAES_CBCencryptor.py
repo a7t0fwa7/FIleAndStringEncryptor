@@ -41,7 +41,15 @@ def encrypt_file(file_name, password, key_size=256):
 
     # Print encrypted file in desired format
     encrypted_file_hex = ', '.join(['0x{:02x}'.format(b) for b in encrypted_contents])
+    length = len(encrypted_file_hex)
     print(colored(f'[+] Encrypted File Output in Hex Format: {{ {encrypted_file_hex} }};', 'magenta'))
+    #print(colored(f'[+] Size of Encrypted File: {length}', 'red'))
+
+    # Print number of bytes for the file
+    file_size = os.path.getsize(file_name)
+    print(colored(f'[+] Number of bytes for the file: {file_size}', 'red'))
+
+    
 
     # Write encrypted contents to file
     with open(file_name + '.enc', 'wb') as file:
