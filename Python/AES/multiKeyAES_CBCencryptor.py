@@ -8,7 +8,7 @@ from Cryptodome.Random import get_random_bytes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
-# This script works quite well except I want to modify it to use only one key for the strings and files as this currently encrypts each string and files with a seperate encryption key
+# This script encrypts each string and file with a unique 128 or 256 bit key in AES CBC. I will modify this in future if I have time to encrypt the strings and files with one key option.
 
 def parse_hex_string(s):
     return bytes.fromhex(s[2:])
